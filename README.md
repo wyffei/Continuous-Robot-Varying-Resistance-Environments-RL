@@ -108,6 +108,10 @@ The learned policy was then tested in the main air–water interface scenario.
 
 The RL controller was compared with a traditional inverse kinematics controller.
 
+<p align="center">
+  <img src="images/compare ik.png" alt="RL versus IK comparison" width="65%">
+</p>
+
 Main findings:
 
 - IK showed oscillation and poor adaptation to drag differences.
