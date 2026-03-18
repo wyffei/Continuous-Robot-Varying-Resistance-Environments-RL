@@ -83,35 +83,46 @@ The reward includes several terms:
 
 This reward design encourages the agent to reach the target accurately while avoiding wasteful motion and reducing total energy consumption.
 
-## Learning Agent
+## Results
 
-The training agent is based on PPO / recurrent PPO with:
+The experiments include the following settings:
 
-- MLP feature extractor: `[256, 256, 128]`
-- LSTM layer: 128 units
-- ReLU activations
-- entropy decay during training
+### 1. Single-medium experiments
 
-### Training Hyperparameters
+The learned policy was first evaluated in a single-fluid environment to study convergence stability and energy efficiency under constant resistance.
 
-- learning rate: `2e-4`
-- discount factor: `0.995`
-- GAE lambda: `0.95`
-- PPO clip range: `0.2`
-- batch size: `128`
-- rollout length: `256`
-- total training steps: `800000`
+#### Fixed target reaching
+The velocity-based controller achieved stable and smooth reaching behavior.
 
-## Neural Network
+#### Random target reaching
+Velocity-based control showed more stable and energy-efficient motion than torque-based control.
 
-The policy and value networks are dual-branch MLPs with the same hidden-layer layout:
+### 2. Two-medium experiments
 
-- Linear → 256 → ReLU
-- Linear → 256 → ReLU
-- Linear → 128 → ReLU
+The learned policy was then tested in the main air–water interface scenario.
 
-The actor outputs the mean action vector, while a learnable `log_std` controls action variance.  
-The critic outputs a scalar state-value estimate.
+- The velocity-based RL agent maintained stable behavior across the interface.
+- It successfully reached the target despite abrupt changes in drag and hydrodynamic load.
+
+### 3. Comparison with IK baseline
+
+The RL controller was compared with a traditional inverse kinematics controller.
+
+Main findings:
+
+- IK showed oscillation and poor adaptation to drag differences.
+- RL generated smoother and more drag-aware trajectories.
+- RL consumed significantly less energy than the IK baseline.
+
+According to the report, the RL policy achieved much lower energy consumption than IK in the two-medium scenario.
+
+## Key Findings
+
+- Action-space design strongly affects learning stability.
+- Velocity control is significantly more stable than direct torque control in two-fluid dynamics.
+- RL can learn environment-aware strategies without explicit fluid labels.
+- Energy-aware reward shaping improves motion efficiency.
+- Compared with IK, RL adapts better to varying resistance environments.
 
 ## Dependencies
 
@@ -125,8 +136,3 @@ This project is built on the following libraries:
 - Stable-Baselines3
 - Gymnasium
 - Matplotlib
-
-Example installation:
-
-```bash
-pip install numpy scipy matplotlib torch gymnasium stable-baselines3
